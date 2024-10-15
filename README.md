@@ -1,4 +1,4 @@
-# Optimization_Project_2024
+# Optimization Course 2024
 
 This repository contains the assignments for the "Optimization Course" taught by PhD. Joaquín Peña Acevedo at CIMAT (Centro de Investigación en Matemáticas), developed in the Python programming language. The code is written in Spanish.
 
