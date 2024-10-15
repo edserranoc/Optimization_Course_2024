@@ -10,7 +10,7 @@ In this assignment, the golden section method is programmed to find the minimum 
 ### 2. Line Search Methods (Part 1)
 In this assignment, the exact gradient descent algorithm for quadratic functions and the gradient descent with the golden section method are programmed and tested.
 
-## 3. Line Search Methods (Part 2)
+### 3. Line Search Methods (Part 2)
 In this assignment, the gradient descent algorithm with backtracking using Armijo's condition is implemented, along with another version featuring a modified step size.
 
 ## License
