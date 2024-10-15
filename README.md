@@ -16,5 +16,8 @@ In this assignment, the gradient descent algorithm with backtracking using Armij
 ### 4. Newton's Method
 In this assignment, the Newton and Damped Newton methods are programmed, and an efficient, compact representation of Hartmann's function, along with its gradient and Hessian, is implemented.
 
+### 5. Trust Region Methods
+In this assignment, an analysis of the Newton Method and convex functions is conducted, and the trust region method with the Cauchy point is implemented.
+
 ## License
 This project is licensed under the Apache-2.0 license. See the LICENSE file for details.
