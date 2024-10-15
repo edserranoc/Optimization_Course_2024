@@ -13,5 +13,8 @@ In this assignment, the exact gradient descent algorithm for quadratic functions
 ### 3. Line Search Methods (Part 2)
 In this assignment, the gradient descent algorithm with backtracking using Armijo's condition is implemented, along with another version featuring a modified step size.
 
+### 4. Newton's Method
+In this assignment, the Newton and Damped Newton methods are programmed, and an efficient, compact representation of Hartmann's function, along with its gradient and Hessian, is implemented.
+
 ## License
 This project is licensed under the Apache-2.0 license. See the LICENSE file for details.
