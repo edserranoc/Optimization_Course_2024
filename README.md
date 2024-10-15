@@ -25,5 +25,11 @@ In this assignment, the conjugate gradient method is implemented, along with oth
 ### 7. Line search Newton with conjugate gradient
 In this assignment, the line search Newton method with conjugate gradient is implemented. In addition, a numerical analysis is conducted to assess the performance of gradient and Hessian approximations.
 
+### 8. BFGS method
+In this assigment, the Quasi-Newton method with BFGS update is implemented.
+
+### 9. Logistic Regression and Gauss-Newton Method
+In this assignment, the logistic regression task is applied to a binary classification problem, and a regression task is performed using the Gauss-Newton method.
+
 ## License
 This project is licensed under the Apache-2.0 license. See the LICENSE file for details.
