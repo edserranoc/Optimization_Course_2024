@@ -139,6 +139,65 @@ class Opti_functions:
         return alpha, k
     
     @staticmethod
+    def brack_tracking_Wolfe(alpha_init:float, 
+                             rho:float,
+                             c1:float, c2:float, 
+                             xk:np.ndarray,
+                             f:Callable[[np.ndarray],float],
+                                gradf:Callable[[np.ndarray],np.ndarray],
+                                fk:float,
+                                grad_fk:np.ndarray,
+                                dir_pk:np.ndarray,
+                                iter_maxb:int=100,
+                                alt:bool=False)->Tuple[float,int]:
+        """Backtracking line search algorithm using Wolfe conditions
+        
+        :param alpha_init: float, initial step length
+        :param rho: float, decay factor for step length
+        :param c1: float, constant for Armijo condition
+        :param c2: float, constant for Wolfe condition
+        :param xk: np.ndarray, current point
+        :param f: callable, objective function
+        :param gradf: callable, gradient of objective function
+        :param fk: float, objective function value at xk
+        :param grad_fk: np.ndarray, gradient of objective function at xk
+        :param dir_pk: np.ndarray, search direction
+        :param iter_maxb: int, maximum number of iterations for backtracking
+        
+        :return : Tuple[float,int], step length and number of iterations
+        """
+        
+        if alt:
+            alpha = alpha_init
+            k = 0
+            flag = False
+            while k < iter_maxb:
+                cond = f(xk + alpha*dir_pk) <= fk + c1*alpha*np.dot(grad_fk,dir_pk)
+
+                if (cond and ~flag)and alt:
+                    flag = True
+                    xu = xk + alpha*dir_pk
+                    ku = k
+
+                if cond and (np.dot(gradf(xk + alpha*dir_pk),dir_pk) >= c2*np.dot(grad_fk,dir_pk)):
+                    return alpha, k
+                alpha *= rho
+                k += 1
+            if flag:
+                return xu, ku
+            return alpha, k
+        else:
+            alpha = alpha_init
+            k = 0
+            while k < iter_maxb:
+                if (f(xk + alpha*dir_pk) <= fk + c1*alpha*np.dot(grad_fk,dir_pk)) and (np.dot(gradf(xk + alpha*dir_pk),dir_pk) >= c2*np.dot(grad_fk,dir_pk)):
+                    return alpha, k
+                alpha *= rho
+                k += 1
+            return alpha, k
+    
+    
+    @staticmethod
     def contornosFnc2D(fncf, xleft, xright, ybottom, ytop, levels,r_max1, list_xk1, r_max2=None, list_xk2=None,):
         # Crea una discretización uniforme del intervalo [xleft, xright]
         ax = np.linspace(xleft, xright, 250)

@@ -19,5 +19,11 @@ In this assignment, the Newton and Damped Newton methods are programmed, and an 
 ### 5. Trust Region Methods
 In this assignment, an analysis of the Newton Method and convex functions is conducted, and the trust region method with the Cauchy point is implemented.
 
+### 6. Conjugate Gradient Methods
+In this assignment, the conjugate gradient method is implemented, along with other versions that use the Fletcher-Reeves and Hestenes-Stiefel formulas, as well as the Wolfe condition for backtracking.
+
+### 7. Line search Newton with conjugate gradient
+In this assignment, the line search Newton method with conjugate gradient is implemented. In addition, a numerical analysis is conducted to assess the performance of gradient and Hessian approximations.
+
 ## License
 This project is licensed under the Apache-2.0 license. See the LICENSE file for details.

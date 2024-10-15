@@ -44,10 +44,10 @@ class Opti_functions:
                         2*(1.5-x[0]+x[0]*x[1])*x[0]+4*(2.25-x[0]+x[0]*x[1]**2)*x[0]*x[1]+6*(2.625-x[0]+x[0]*x[1]**3)*x[0]*x[1]**2])
     
     def hess_fncBeale(x):
-        return [[6 - 4*x[1] - 2*x[1]**2 - 4*x[1]**3 + 2*x[1]**4 + 2*x[1]**6, 
+        return np.array([[6 - 4*x[1] - 2*x[1]**2 - 4*x[1]**3 + 2*x[1]**4 + 2*x[1]**6, 
              3 - 4*x[0] + 9.*x[1] - 4*x[0]*x[1] + 15.75*x[1]**2 - 12*x[0]*x[1]**2 + 8*x[0]*x[1]**3 + 12*x[0]*x[1]**5],
             [3 - 4*x[0] + 9.*x[1] - 4*x[0]*x[1] + 15.75*x[1]**2 - 12*x[0]*x[1]**2 + 8*x[0]*x[1]**3 + 12*x[0]*x[1]**5,
-             9*x[0] - 2*x[0]**2 + 31.5*x[0]*x[1] - 12*x[0]**2*x[1] + 12*x[0]**2*x[1]**2 + 30*x[0]**2*x[1]**4]]
+             9*x[0] - 2*x[0]**2 + 31.5*x[0]*x[1] - 12*x[0]**2*x[1] + 12*x[0]**2*x[1]**2 + 30*x[0]**2*x[1]**4]])
     
     
     @staticmethod    
@@ -94,6 +94,7 @@ class Opti_functions:
     @classmethod
     def hess_Hartmann(cls,x:np.ndarray)->np.ndarray:
 
+        
         hess = np.zeros((6,6))
         for k in range(4):
             phi = np.exp(-np.sum(cls.A_Hartmann[k] * (x - cls.P_Hartmann[k])**2))
@@ -127,9 +128,9 @@ class Opti_functions:
         
         :return: step length and number of iterations (Tuple[float,int]) 
         """
-        
         alpha = alpha_init
         k = 0
+        flag = False
         while k < iter_maxb:
             if f(xk + alpha*dir_pk) <= fk + c*alpha*np.dot(grad_fk,dir_pk):
                 return alpha, k
@@ -137,6 +138,65 @@ class Opti_functions:
             k += 1
         print('Backtracking line search did not converge')
         return alpha, k
+    
+    @staticmethod
+    def brack_tracking_Wolfe(alpha_init:float, 
+                             rho:float,
+                             c1:float, c2:float, 
+                             xk:np.ndarray,
+                             f:Callable[[np.ndarray],float],
+                                gradf:Callable[[np.ndarray],np.ndarray],
+                                fk:float,
+                                grad_fk:np.ndarray,
+                                dir_pk:np.ndarray,
+                                iter_maxb:int=100,
+                                alt:bool=False)->Tuple[float,int]:
+        """Backtracking line search algorithm using Wolfe conditions
+        
+        :param alpha_init: float, initial step length
+        :param rho: float, decay factor for step length
+        :param c1: float, constant for Armijo condition
+        :param c2: float, constant for Wolfe condition
+        :param xk: np.ndarray, current point
+        :param f: callable, objective function
+        :param gradf: callable, gradient of objective function
+        :param fk: float, objective function value at xk
+        :param grad_fk: np.ndarray, gradient of objective function at xk
+        :param dir_pk: np.ndarray, search direction
+        :param iter_maxb: int, maximum number of iterations for backtracking
+        
+        :return : Tuple[float,int], step length and number of iterations
+        """
+        
+        if alt:
+            alpha = alpha_init
+            k = 0
+            flag = False
+            while k < iter_maxb:
+                cond = f(xk + alpha*dir_pk) <= fk + c1*alpha*np.dot(grad_fk,dir_pk)
+
+                if (cond and ~flag)and alt:
+                    flag = True
+                    xu = xk + alpha*dir_pk
+                    ku = k
+
+                if cond and (np.dot(gradf(xk + alpha*dir_pk),dir_pk) >= c2*np.dot(grad_fk,dir_pk)):
+                    return alpha, k
+                alpha *= rho
+                k += 1
+            if flag:
+                return xu, ku
+            return alpha, k
+        else:
+            alpha = alpha_init
+            k = 0
+            while k < iter_maxb:
+                if (f(xk + alpha*dir_pk) <= fk + c1*alpha*np.dot(grad_fk,dir_pk)) and (np.dot(gradf(xk + alpha*dir_pk),dir_pk) >= c2*np.dot(grad_fk,dir_pk)):
+                    return alpha, k
+                alpha *= rho
+                k += 1
+            return alpha, k
+    
     
     @staticmethod
     def contornosFnc2D(fncf, xleft, xright, ybottom, ytop, levels,r_max1, list_xk1, r_max2=None, list_xk2=None,):
